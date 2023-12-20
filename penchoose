@@ -1,0 +1,20 @@
+#!/usr/bin/perl
+use strict;
+use warnings;
+
+my @mon = `xrandr` =~ /^(.*) connected/mg;
+my $pen = (`xinput --list` =~ /Pen stylus.*id=(\d+)/mg)[0];
+$pen ||= (`xinput --list` =~ /Pen Pen.*id=(\d+)/mg)[0];
+my $choose = 1;
+
+print "Option $_: $mon[$_ - 1]\n" foreach (1..scalar @mon);
+
+while (scalar @mon > 1) {
+    print "> "; $choose = <>;
+    if (0 < $choose <= scalar @mon) { last; }
+}
+
+print "map pen ($pen) to $mon[$choose - 1]\n";
+`xinput map-to-output $pen $mon[$choose - 1]`;
+
+# choose the screen the drawing tablet should be mapped to
