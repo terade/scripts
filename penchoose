@@ -1,16 +1,24 @@
-#!/usr/bin/perl
+#!/usr/bin/env perl
 use strict;
 use warnings;
+
+use Scalar::Util qw(looks_like_number);
 
 my @mon = `xrandr` =~ /^(.*) connected/mg;
 my $pen = (`xinput --list` =~ /Pen stylus.*id=(\d+)/mg)[0];
 $pen ||= (`xinput --list` =~ /Pen Pen.*id=(\d+)/mg)[0];
+$pen or die "no drawing tablet is connected\n";
 my $choose = 1;
 
 print "Option $_: $mon[$_ - 1]\n" foreach (1..scalar @mon);
 
 while (scalar @mon > 1) {
-    print "> "; $choose = <>;
+    print "> "; $choose = <STDIN>;
+    chomp $choose;
+    if (!looks_like_number($choose)) {
+        print "$choose is not a number";
+        next;
+    }
     if (0 < $choose <= scalar @mon) { last; }
 }
 
