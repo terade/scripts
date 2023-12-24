@@ -1,0 +1,19 @@
+#!/usr/bin/env perl
+
+use 5.38.1;
+use strict;
+use warnings;
+use diagnostics;
+
+my $input = join ' ', @ARGV;
+unless ($input) {
+    say("provide a list of arguments separated by 'or'") ;
+    exit(0);
+}
+
+my @decisions = split /or/, $input;
+my $decision = $decisions[rand(@decisions)];
+$decision =~ s/^\s+|\s+$//g;
+say $decision;
+
+# avoid decision paralysis
