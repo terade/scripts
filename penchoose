@@ -15,7 +15,7 @@ print "Option $_: $mon[$_ - 1]\n" foreach (1..scalar @mon);
 while (scalar @mon > 1) {
     print "> "; $choose = <STDIN>;
     chomp $choose;
-    if (!looks_like_number($choose)) {
+    unless (looks_like_number($choose)) {
         print "$choose is not a number";
         next;
     }
