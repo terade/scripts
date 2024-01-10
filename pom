@@ -1,0 +1,46 @@
+#!/usr/bin/env perl
+
+use 5.38.1;
+use strict;
+use warnings;
+use diagnostics;
+use Scalar::Util qw(looks_like_number);
+use Time::HiRes qw(usleep);
+
+if ( @ARGV % 2 == 1 and @ARGV != 1 ) {
+    die("argument list must be even sized or only consist out of one element\n");
+}
+elsif (@ARGV == 0) {
+    exit;
+}
+
+while (@ARGV) {
+    my ( $time, $name ) = ( shift @ARGV, shift @ARGV );
+    $name ||= "";
+
+    looks_like_number($time) or die("$time is not a number, needs to be\n");
+    my $left = $time * 60;
+
+    while ($left) {
+        system('clear');
+        say( sprintf( "%s\n%02d:%02d", $name, int( $left / 60 ), $left % 60 ) );
+        sleep(1);
+        $left--;
+    }
+
+    for (0..20) {
+        system('clear');
+        if ($_ % 2 == 1) {
+            say ((("unit over " x 10) . "\n") x 80);
+        }
+        usleep(70000);
+    }
+
+    if (@ARGV) {
+        say "continue?";
+        <STDIN>;
+    }
+}
+
+say "end reached";
+
