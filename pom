@@ -7,11 +7,9 @@ use diagnostics;
 use Scalar::Util qw(looks_like_number);
 use Time::HiRes qw(usleep);
 
+exit if (@ARGV == 0);
 if ( @ARGV % 2 == 1 and @ARGV != 1 ) {
     die("argument list must be even sized or only consist out of one element\n");
-}
-elsif (@ARGV == 0) {
-    exit;
 }
 
 while (@ARGV) {

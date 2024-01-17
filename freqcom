@@ -1,0 +1,44 @@
+#!/usr/bin/env perl 
+
+use 5.38.1;
+use strict;
+use warnings;
+use diagnostics;
+
+my %freq = ();
+my $total = 0;
+my $multiline = "";
+my $index;
+
+my $shell = (`echo \$SHELL` =~ /\/(\w+)$/g)[0];
+
+$index = 0 if ($shell eq "fish");
+$index = 1 if ($shell eq "bash");
+
+while (<STDIN>) {
+    my $line;
+    if ($_ =~ /\\$/) {
+        $multiline = $multiline . $_;
+        next;
+    }
+    else {
+        $line = $multiline || $_;
+        $multiline = "0";
+    }
+    my @command = split /\s/, $line;
+
+    if ($command[0]) {
+        $freq{$command[$index]}++;
+        $total++;
+    }
+}
+
+my @freq;
+push @freq, [$_, $freq{$_}/$total] foreach (keys %freq);
+@freq = sort {$b->[1] <=> $a->[1]} @freq;
+
+say "place | frequency | command";
+for my $i (0..($ARGV[0] || 10)) {
+    last unless ($freq[$i]);
+    printf "%02d:  %.2f  %s\n", $i + 1, $freq[$i]->[1], $freq[$i]->[0];
+}
