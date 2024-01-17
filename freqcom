@@ -42,3 +42,5 @@ for my $i (0..($ARGV[0] || 10)) {
     last unless ($freq[$i]);
     printf "%02d:  %.2f  %s\n", $i + 1, $freq[$i]->[1], $freq[$i]->[0];
 }
+
+# get frequency of commands
