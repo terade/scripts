@@ -40,7 +40,9 @@ push @freq, [$_, $freq{$_}/$total] foreach (keys %freq);
 say "place | frequency | command";
 for my $i (0..($ARGV[0] || 10)) {
     last unless ($freq[$i]);
-    printf "%02d:  %.2f  %s\n", $i + 1, $freq[$i]->[1], $freq[$i]->[0];
+    printf "%.2f%%  %s\n", $freq[$i]->[1] * 100, $freq[$i]->[0];
 }
+say "total: $total commands run";
 
 # get frequency of commands
+# usage: history | freqcom <number>
